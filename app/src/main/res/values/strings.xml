@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Rating Dialok Sample</string>
+    <string name="title">Rate me pls</string>
+    <string name="message">Want to rate this app? Thank you very much, Sir!</string>
+    <string name="rateNow">Rate Now</string>
+    <string name="remindLater">Remind me later</string>
+    <string name="remindNever">Remind me never again</string>
+</resources>
