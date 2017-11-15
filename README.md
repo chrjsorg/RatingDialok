@@ -34,7 +34,6 @@ private fun setupRatingDialog() {
 ```
 
 
-
 ### Flow
 Create dialog in an activity or fragment, with the onStart() method you initialize the first start of the app and increase the launch counter.
 
