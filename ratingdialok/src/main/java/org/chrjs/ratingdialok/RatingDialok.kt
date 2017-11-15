@@ -87,7 +87,7 @@ class RatingDialok(ctx: Context) {
      */
     @Suppress("MemberVisibilityCanPrivate")
     val isShowing: Boolean
-        get() = dialog != null && dialog!!.isShowing
+        get() = dialog?.isShowing ?: false
 
     /**
      * Adds an (additional) [Condition]
@@ -234,22 +234,20 @@ class RatingDialok(ctx: Context) {
             (lastDate - firstDate) / (1000 * 60 * 60 * 24)
 
     private fun createDialog(context: Context): Dialog {
-        var builder = AlertDialog.Builder(context, resourceIdStyle)
-                .setMessage(resourceIdMessage!!)
-                .setPositiveButton(resourceIdRateNow!!, { _, _ -> rateNow() })
-                .setOnCancelListener({ setRemindLater() })
+        val builder = AlertDialog.Builder(context, resourceIdStyle).apply {
+            setMessage(resourceIdMessage!!)
+            setPositiveButton(resourceIdRateNow!!, { _, _ -> rateNow() })
+            setOnCancelListener({ setRemindLater() })
 
-        //Optional field title
-        if (resourceIdTitle != null)
-            builder = builder.setTitle(resourceIdTitle!!)
+            //Optional field title
+            resourceIdTitle?.let { setTitle(it) }
 
-        //Optional Button remind later
-        if (resourceIdRemindLater != null)
-            builder = builder.setNeutralButton(resourceIdRemindLater!!, { _, _ -> setRemindLater() })
+            //Optional Button remind later
+            resourceIdRemindLater?.let { setNeutralButton(it, { _, _ -> setRemindLater() }) }
 
-        //Optional Button remind never
-        if (resourceIdRemindNever != null)
-            builder = builder.setNegativeButton(resourceIdRemindNever!!, { _, _ -> setNeverRemindAgain() })
+            //Optional Button remind never
+            resourceIdRemindNever?.let { setNegativeButton(it, { _, _ -> setNeverRemindAgain() }) }
+        }
 
         return builder.create()
     }
