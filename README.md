@@ -1,5 +1,5 @@
 # RatingDialok [![Build Status](https://travis-ci.org/chrjsorg/RatingDialok.svg?branch=master)](https://travis-ci.org/chrjsorg/RatingDialok)
-Customizable Android Rating Dialog written in Kolin, provides a simple way to display a rating alert dialog.
+Customizable Android Rating Dialog written in Kotlin, provides a simple way to display a rating alert dialog.
 
 <img src="https://raw.githubusercontent.com/chrjsorg/RatingDialok/master/screenshots/screenshot.png" width="310px">
 
@@ -7,35 +7,36 @@ Customizable Android Rating Dialog written in Kolin, provides a simple way to di
 ### Settings
 ```kotlin
 private fun setupRatingDialog() {
-  ratingDialog = RatingDialok(this)
-	
-  //Is the dialog cancelable?
-  ratingDialog.isCancelable = true
+    ratingDialog = RatingDialok(this).apply {
+        //Is the dialog cancelable?
+        isCancelable = true
 
-  //Minimum Days after first launch?
-  ratingDialog.minimumDaysAfter = 7
-	
-  //Minimum launch counter
-  ratingDialog.minimumLaunchCount = 5
+        //Minimum Days after first launch?
+        minimumDaysAfter = 7
 
-  //Style/Theme
-  ratingDialog.resourceIdStyle = R.style.CustomAlertDialogStyle
-	
-  //Strings
-  ratingDialog.setStrings(R.string.title, R.string.message, R.string.rateNow,
-	R.string.remindLater, R.string.remindNever)
-   
-  //Action Callback (optional)
-  ratingDialog.actionCallback = actionCallback
-	
-  //Additional Condition besides the launchCounter / minimumDaysAfter (optional)
-  ratingDialog.addConditionTrigger(conditionTrigger)
+        //Minimum launch counter
+        minimumLaunchCount = 5
+
+        //Style/Theme
+        resourceIdStyle = R.style.CustomAlertDialogStyle
+
+        //Strings
+        setStrings(R.string.title, R.string.message, R.string.rateNow, R.string.remindLater,
+                R.string.remindNever)
+
+
+        //Action Callback (optional)
+        actionCallback = customActionCallback
+
+        //Additional Condition besides the launchCounter / minimumDaysAfter (optional)
+        addAdditionalCondition(conditionTrigger)
+    }
 }
 ```
 
 
 ### Flow
-Create dialog in an activity or fragment, with the onStart() method you initialize the first start of the app and increase the launch counter.
+Create dialog in an activity or fragment, with the `onStart()` method you initialize the first start of the app and increase the launch counter.
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ override fun onResume() {
 You can register for callbacks when the user taps something in the dialog
 
 ```kotlin
-private var actionCallback: RatingDialok.ActionCallback = object : RatingDialok.ActionCallback {
+private var customActionCallback: RatingDialok.ActionCallback = object : RatingDialok.ActionCallback {
     override fun remindLaterClicked() {
         Toast.makeText(this@MainActivity, "Remind later clicked", Toast.LENGTH_SHORT).show()
     }
@@ -73,7 +74,7 @@ private var actionCallback: RatingDialok.ActionCallback = object : RatingDialok.
     }
 }
 
-ratingDialog.actionCallback = actionCallback
+ratingDialog.actionCallback = customActionCallback
 ```
 
 ### Additional Conditions
