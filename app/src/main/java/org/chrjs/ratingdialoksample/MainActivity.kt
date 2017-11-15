@@ -26,15 +26,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRatingDialog() {
-        ratingDialog = RatingDialok(this)
-        ratingDialog.isCancelable = true
-        ratingDialog.minimumDaysAfter = 7
-        ratingDialog.minimumLaunchCount = 5
-        ratingDialog.resourceIdStyle = R.style.CustomAlertDialogStyle
-        ratingDialog.setStrings(R.string.title, R.string.message, R.string.rateNow, R.string.remindLater,
-                R.string.remindNever)
-        ratingDialog.actionCallback = actionCallback
-        ratingDialog.addAdditionalCondition(condition)
+        ratingDialog = RatingDialok(this).apply {
+            isCancelable = true
+            minimumDaysAfter = 7
+            minimumLaunchCount = 5
+            resourceIdStyle = R.style.CustomAlertDialogStyle
+            setStrings(R.string.title, R.string.message, R.string.rateNow, R.string.remindLater,
+                    R.string.remindNever)
+            actionCallback = customActionCallback
+            addAdditionalCondition(condition)
+        }
     }
 
     private var condition: RatingDialok.Condition = object : RatingDialok.Condition {
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var actionCallback: RatingDialok.ActionCallback = object : RatingDialok.ActionCallback {
+    private var customActionCallback: RatingDialok.ActionCallback = object : RatingDialok.ActionCallback {
         override fun remindLaterClicked() {
             Toast.makeText(this@MainActivity, "Remind later clicked", Toast.LENGTH_SHORT).show()
         }
