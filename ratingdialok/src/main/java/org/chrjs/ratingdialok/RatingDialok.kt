@@ -12,7 +12,6 @@ import java.lang.ref.WeakReference
 import java.util.Date
 import kotlin.collections.ArrayList
 
-
 class RatingDialok(ctx: Context) {
 
     companion object {
@@ -137,7 +136,7 @@ class RatingDialok(ctx: Context) {
      */
     @Suppress("unused")
     fun showDialogNoMatterWhat() {
-        showDialog(context.get()!!)
+        showDialog()
     }
 
     private fun additionalConditionsAreMet(): Boolean = additionalConditions.any { !it.conditionMet() }
@@ -148,7 +147,7 @@ class RatingDialok(ctx: Context) {
      */
     @Suppress("unused")
     fun showDialogIfNeeded() {
-        if (areConditionsMet()) showDialog(context.get()!!)
+        if (areConditionsMet()) showDialog()
     }
 
     private fun setNeverRemindAgain() {
@@ -161,11 +160,11 @@ class RatingDialok(ctx: Context) {
      */
     @Suppress("MemberVisibilityCanPrivate")
     fun rateNow() {
-        val appPackageName = context.get()!!.packageName
+        val appPackageName = context.get()?.packageName
         try {
-            context.get()!!.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)))
+            context.get()?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)))
         } catch (e: ActivityNotFoundException) {
-            context.get()!!.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)))
+            context.get()?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)))
         }
 
         sharedPreferences.edit().putBoolean(KEY_USER_HAS_RATED, true).apply()
@@ -205,14 +204,14 @@ class RatingDialok(ctx: Context) {
         return daysBetween(firstLaunchDate, Date().time) > minimumDaysAfter || launchCount > minimumLaunchCount
     }
 
-    private fun showDialog(context: Context) {
+    private fun showDialog() {
         if (isShowing)
             return
 
         try {
             dialog = null
-            dialog = createDialog(context)
-            dialog!!.show()
+            dialog = createDialog()
+            dialog?.show()
         } catch (e: Exception) {
             //Catch all exceptions to prevent a crash due to conflicts with the UI thread.
             // For example: "Expired Window Token", IllegalStateException, "BadTokenException", ...
@@ -233,8 +232,9 @@ class RatingDialok(ctx: Context) {
     private fun daysBetween(firstDate: Long, lastDate: Long): Long =
             (lastDate - firstDate) / (1000 * 60 * 60 * 24)
 
-    private fun createDialog(context: Context): Dialog {
-        val builder = AlertDialog.Builder(context, resourceIdStyle).apply {
+    private fun createDialog(): Dialog? {
+        if (context.get() == null) return null
+        val builder = AlertDialog.Builder(context.get()!!, resourceIdStyle).apply {
             setMessage(resourceIdMessage!!)
             setPositiveButton(resourceIdRateNow!!, { _, _ -> rateNow() })
             setOnCancelListener({ setRemindLater() })
