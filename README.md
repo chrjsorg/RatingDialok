@@ -16,6 +16,9 @@ private fun setupRatingDialog() {
 
         //Minimum launch counter
         minimumLaunchCount = 5
+        
+        //Only one of the two required conditions must be met
+        useOrConditionForDaysAfterAndLaunchCount = true
 
         //Style/Theme
         resourceIdStyle = R.style.CustomAlertDialogStyle

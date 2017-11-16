@@ -50,6 +50,12 @@ class RatingDialok(ctx: Context) {
     private var additionalConditions: ArrayList<Condition> = ArrayList()
 
     /**
+     * Set to true if you want to have an "or" condition instead of an "and" condition
+     */
+    @Suppress("MemberVisibilityCanPrivate")
+    var useOrConditionForDaysAfterAndLaunchCount = false
+
+    /**
      * Indicates how many times the activity should start before showing the dialog
      */
     @Suppress("MemberVisibilityCanPrivate")
@@ -201,7 +207,10 @@ class RatingDialok(ctx: Context) {
         val launchCount = sharedPreferences.getInt(KEY_LAUNCH_COUNT, 0)
         val firstLaunchDate = sharedPreferences.getLong(KEY_FIRST_START_DATE, 0L)
 
-        return daysBetween(firstLaunchDate, Date().time) > minimumDaysAfter && launchCount > minimumLaunchCount
+        return if (useOrConditionForDaysAfterAndLaunchCount)
+            daysBetween(firstLaunchDate, Date().time) > minimumDaysAfter || launchCount > minimumLaunchCount
+        else
+            daysBetween(firstLaunchDate, Date().time) > minimumDaysAfter && launchCount > minimumLaunchCount
     }
 
     private fun showDialog() {

@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             isCancelable = true
             minimumDaysAfter = 7
             minimumLaunchCount = 5
+            useOrConditionForDaysAfterAndLaunchCount = true
             resourceIdStyle = R.style.CustomAlertDialogStyle
             setStrings(R.string.title, R.string.message, R.string.rateNow, R.string.remindLater,
                     R.string.remindNever)
