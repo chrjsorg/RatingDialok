@@ -90,7 +90,7 @@ private var condition: RatingDialok.Condition = object : RatingDialok.Condition 
 
 ratingDialog.addAdditionalCondition(condition);
 ```
-If you want only your custom conditions to apply, you can set both default conditions to `0` so they will apply right away
+If you want only your custom conditions to apply, you can set both default conditions to `-1` so they will apply right away
 
 ```kotlin
   ratingDialog.minimumDaysAfter = 0
