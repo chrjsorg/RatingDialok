@@ -139,7 +139,7 @@ class RatingDialok(ctx: Context) {
         showDialog()
     }
 
-    private fun additionalConditionsAreMet(): Boolean = additionalConditions.any { !it.conditionMet() }
+    private fun additionalConditionsAreMet(): Boolean = additionalConditions.all { it.conditionMet() }
 
     /**
      * Checks [additionalConditions], minimumDaysAfter and minimumLaunches if all conditions are met,
@@ -201,7 +201,7 @@ class RatingDialok(ctx: Context) {
         val launchCount = sharedPreferences.getInt(KEY_LAUNCH_COUNT, 0)
         val firstLaunchDate = sharedPreferences.getLong(KEY_FIRST_START_DATE, 0L)
 
-        return daysBetween(firstLaunchDate, Date().time) > minimumDaysAfter || launchCount > minimumLaunchCount
+        return daysBetween(firstLaunchDate, Date().time) > minimumDaysAfter && launchCount > minimumLaunchCount
     }
 
     private fun showDialog() {
