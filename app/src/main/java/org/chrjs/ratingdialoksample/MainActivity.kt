@@ -11,12 +11,32 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var ratingDialog: RatingDialok
 
+    private var rIdRemindNever: Int? = null
+    private var rIdRemindLater: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupRatingDialog()
-        button.setOnClickListener({ ratingDialog.showDialogNoMatterWhat() })
-        button2.setOnClickListener { ratingDialog.rateNow() }
+        buttonDefaultDialog.setOnClickListener {
+            rIdRemindNever = R.string.remindNever
+            rIdRemindLater = R.string.remindLater
+            setupRatingDialog()
+            ratingDialog.showDialogNoMatterWhat()
+        }
+        buttonNoRemindNever.setOnClickListener {
+            rIdRemindNever = null
+            rIdRemindLater = R.string.remindLater
+            setupRatingDialog()
+            ratingDialog.showDialogNoMatterWhat()
+        }
+        buttonNoRemindLater.setOnClickListener {
+            rIdRemindNever = R.string.remindNever
+            rIdRemindLater = null
+            setupRatingDialog()
+            ratingDialog.showDialogNoMatterWhat()
+        }
+        buttonRateNow.setOnClickListener { ratingDialog.rateNow() }
         ratingDialog.onStart()
     }
 
@@ -32,8 +52,8 @@ class MainActivity : AppCompatActivity() {
             minimumLaunchCount = 5
             useOrConditionForDaysAfterAndLaunchCount = true
             resourceIdStyle = R.style.CustomAlertDialogStyle
-            setStrings(R.string.title, R.string.message, R.string.rateNow, R.string.remindLater,
-                    R.string.remindNever)
+            setStrings(R.string.title, R.string.message, R.string.rateNow, rIdRemindLater,
+                    rIdRemindNever)
             actionCallback = customActionCallback
             addAdditionalCondition(condition)
         }
