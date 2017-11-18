@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             setStrings(R.string.title, R.string.message, R.string.rateNow, rIdRemindLater,
                     rIdRemindNever)
             actionCallback = customActionCallback
-            addAdditionalCondition(condition)
+            //addAdditionalCondition(condition)
         }
     }
 
