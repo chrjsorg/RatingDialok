@@ -75,6 +75,10 @@ private var customActionCallback: RatingDialok.ActionCallback = object : RatingD
     override fun remindNeverAgainClicked() {
         Toast.makeText(this@MainActivity, "Remind Never Again clicked", Toast.LENGTH_SHORT).show()
     }
+    
+    override fun dialogShown() {
+        Toast.makeText(this@MainActivity, "Dialog was shown", Toast.LENGTH_SHORT).show()
+    }
 }
 
 ratingDialog.actionCallback = customActionCallback
