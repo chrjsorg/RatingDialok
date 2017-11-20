@@ -1,9 +1,32 @@
-# RatingDialok [![Build Status](https://travis-ci.org/chrjsorg/RatingDialok.svg?branch=master)](https://travis-ci.org/chrjsorg/RatingDialok)
+# RatingDialok 
+[![Build Status](https://travis-ci.org/chrjsorg/RatingDialok.svg?branch=master)](https://travis-ci.org/chrjsorg/RatingDialok)
+[![Release](https://jitpack.io/v/chrjsorg/RatingDialok.svg)]
+(https://jitpack.io/#chrjsorg/RatingDialok.svg)
+
 Customizable Android Rating Dialog written in Kotlin, provides a simple way to display a rating alert dialog.
 
 <img src="https://raw.githubusercontent.com/chrjsorg/RatingDialok/master/screenshots/screenshot.png" width="310px">
 
 ## Usage
+### Download
+Add this to your root *build.gradle* file:
+
+```
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Add the dependency to your app build.gradle file:
+
+```
+compile 'com.github.chrjsorg:RatingDialok:<VERSION>'
+```
+For the latest version see [releases](https://github.com/chrjsorg/RatingDialok/releases)
+
 ### Settings
 ```kotlin
 private fun setupRatingDialog() {
