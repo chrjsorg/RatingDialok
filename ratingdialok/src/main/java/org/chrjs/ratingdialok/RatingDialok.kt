@@ -36,6 +36,7 @@ class RatingDialok(ctx: Context) {
         fun remindLaterClicked()
         fun rateNowClicked()
         fun remindNeverAgainClicked()
+        fun dialogShown()
     }
 
     private val context: WeakReference<Context> = WeakReference(ctx)
@@ -218,6 +219,7 @@ class RatingDialok(ctx: Context) {
             return
 
         try {
+            actionCallback?.dialogShown()
             dialog = null
             dialog = createDialog()
             dialog?.show()
