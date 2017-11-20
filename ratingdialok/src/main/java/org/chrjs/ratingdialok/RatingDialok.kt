@@ -33,9 +33,24 @@ class RatingDialok(ctx: Context) {
      * Action Callback for the Dialog Actions
      */
     interface ActionCallback {
+        /**
+         * Is called when user taps on the remind later button or the dialog is canceled
+         */
         fun remindLaterClicked()
+
+        /**
+         * Is called when user taps on the rate button
+         */
         fun rateNowClicked()
+
+        /**
+         * Is called when user taps on remind never
+         */
         fun remindNeverAgainClicked()
+
+        /**
+         * Is called when the dialog is shown
+         */
         fun dialogShown()
     }
 
@@ -194,6 +209,7 @@ class RatingDialok(ctx: Context) {
      * - Launch Count
      * - First Launch Date
      */
+    @Suppress("RedundantVisibilityModifier")
     public fun reset() {
         setLaunchCount(0)
         val editor = sharedPreferences.edit()
