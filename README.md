@@ -1,6 +1,6 @@
 # RatingDialok 
 [![Build Status](https://travis-ci.org/chrjsorg/RatingDialok.svg?branch=master)](https://travis-ci.org/chrjsorg/RatingDialok)
-[![Release](https://jitpack.io/v/chrjsorg/RatingDialok.svg)]
+![Release](https://jitpack.io/v/chrjsorg/RatingDialok.svg)
 (https://jitpack.io/#chrjsorg/RatingDialok.svg)
 
 Customizable Android Rating Dialog written in Kotlin, provides a simple way to display a rating alert dialog.
