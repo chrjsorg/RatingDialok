@@ -7,12 +7,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.chrjs.ratingdialok.RatingDialok
 import java.util.*
 
+@Suppress("RedundantVisibilityModifier")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var ratingDialog: RatingDialok
 
-    private var rIdRemindNever: Int? = null
-    private var rIdRemindLater: Int? = null
+    private var rIdRemindNever: Int? = R.string.remindNever
+    private var rIdRemindLater: Int? = R.string.remindLater
+
+    public var remindLaterClicked: Boolean = false
+    public var remindNeverClicked: Boolean = false
+    public var rateNowClicked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,9 @@ class MainActivity : AppCompatActivity() {
             rIdRemindLater = null
             setupRatingDialog()
             ratingDialog.showDialogNoMatterWhat()
+        }
+        buttonReset.setOnClickListener {
+            ratingDialog.reset()
         }
         buttonRateNow.setOnClickListener { ratingDialog.rateNow() }
         ratingDialog.onStart()
@@ -68,14 +76,17 @@ class MainActivity : AppCompatActivity() {
 
     private var customActionCallback: RatingDialok.ActionCallback = object : RatingDialok.ActionCallback {
         override fun remindLaterClicked() {
+            remindLaterClicked = true
             Toast.makeText(this@MainActivity, "Remind later clicked", Toast.LENGTH_SHORT).show()
         }
 
         override fun rateNowClicked() {
+            rateNowClicked = true
             Toast.makeText(this@MainActivity, "Rate Now Clicked", Toast.LENGTH_SHORT).show()
         }
 
         override fun remindNeverAgainClicked() {
+            remindNeverClicked = true
             Toast.makeText(this@MainActivity, "Remind Never Again clicked", Toast.LENGTH_SHORT).show()
         }
 
