@@ -142,6 +142,10 @@ If you want to reset the saved data after a huge update for example you can use 
 ```
 
 Set the theme on the dialog: `ratingDialog.resourceIdStyle = R.style.CustomAlertDialogStyle`
+
+### Espresso Tests
+`./gradlew connectedAndroidTest`
+
 ## License
 
 Licensed under the Apache License, Version 2.0 (the "License");

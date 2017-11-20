@@ -10,7 +10,9 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import android.text.format.DateUtils
 import android.view.View
+import junit.framework.Assert.*
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.Rule
@@ -25,9 +27,15 @@ public class MainActivityUiTest {
 
     @Rule
     @JvmField
-    var activityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java, true, false)
+    var activityTestRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
 
-    private var preferencesEditor: SharedPreferences.Editor? = null
+    private val preferences: SharedPreferences by lazy {
+        InstrumentationRegistry.getTargetContext().getSharedPreferences("ratingDialok", 0)
+    }
+
+    private val preferencesEditor: SharedPreferences.Editor by lazy {
+        preferences.edit()
+    }
 
     companion object {
         private val KEY_USER_HAS_RATED = "RD_KEY_USER_HAS_RATED"
@@ -36,19 +44,76 @@ public class MainActivityUiTest {
         private val KEY_LAUNCH_COUNT = "RD_KEY_LAUNCH_COUNT"
     }
 
-    private fun setupAndClearSharedPrefs() {
-        preferencesEditor = InstrumentationRegistry.getTargetContext().getSharedPreferences("ratingDialok", 0).edit()
-        preferencesEditor?.clear()!!.commit()
+    private fun clearSharedPrefs() {
+        preferencesEditor.clear().apply()
+    }
+
+    private fun setConditionsAreMet() {
+        preferencesEditor.putInt(KEY_LAUNCH_COUNT, 10).apply()
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DAY_OF_YEAR, -10)
+        preferencesEditor.putLong(KEY_FIRST_START_DATE, cal.timeInMillis).apply()
+    }
+
+    @Test
+    fun resetShouldResetAllTheData() {
+        preferencesEditor.putInt(KEY_LAUNCH_COUNT, 2)
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DAY_OF_YEAR, -3)
+        preferencesEditor.putLong(KEY_FIRST_START_DATE, cal.timeInMillis)
+        preferencesEditor.putBoolean(KEY_USER_HAS_RATED, true)
+        preferencesEditor.putBoolean(KEY_NEVER_REMIND_AGAIN, true)
+        preferencesEditor.apply()
+
+        activityTestRule.launchActivity(null)
+
+        onView(withId(R.id.buttonReset)).perform(click())
+
+        assertFalse(preferences.getBoolean(KEY_USER_HAS_RATED, true))
+        assertFalse(preferences.getBoolean(KEY_NEVER_REMIND_AGAIN, true))
+        assertEquals(preferences.getLong(KEY_FIRST_START_DATE, 123L), 0L)
+        assertEquals(preferences.getInt(KEY_LAUNCH_COUNT, 123), 0)
+    }
+
+    @Test
+    fun userSetRemindNeverAgainShouldBeSaved() {
+        clearSharedPrefs()
+        setConditionsAreMet()
+
+        activityTestRule.launchActivity(null)
+
+        onView(allOf<View>(withId(android.R.id.button2), withText(R.string.remindNever))).perform(click())
+
+        assertTrue(preferences.getBoolean(KEY_NEVER_REMIND_AGAIN, false))
+
+        //Verify action callback
+        assertTrue(activityTestRule.activity.remindNeverClicked)
+    }
+
+    @Test
+    fun userSetRemindLaterShouldBeSaved() {
+        clearSharedPrefs()
+        setConditionsAreMet()
+
+        activityTestRule.launchActivity(null)
+
+        onView(allOf<View>(withId(android.R.id.button3), withText(R.string.remindLater))).perform(click())
+
+        val launchCount = preferences.getInt(KEY_LAUNCH_COUNT, 100)
+        assertEquals(launchCount, 0)
+
+        val firstLaunchDate = preferences.getLong(KEY_FIRST_START_DATE, 100)
+        assertTrue(DateUtils.isToday(firstLaunchDate))
+
+        //Verify action callback
+        assertTrue(activityTestRule.activity.remindLaterClicked)
     }
 
     @Test
     fun dialogShouldPopupWhenRequirementsAreMet() {
-        setupAndClearSharedPrefs()
+        clearSharedPrefs()
 
-        preferencesEditor!!.putInt(KEY_LAUNCH_COUNT, 10).commit()
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -10)
-        preferencesEditor!!.putLong(KEY_FIRST_START_DATE, cal.timeInMillis).commit()
+        setConditionsAreMet()
 
         activityTestRule.launchActivity(null)
 
@@ -57,9 +122,10 @@ public class MainActivityUiTest {
 
     @Test
     fun dialogShouldNotPopupWhenUserAlreadyRated() {
-        setupAndClearSharedPrefs()
+        clearSharedPrefs()
 
-        preferencesEditor!!.putBoolean(KEY_USER_HAS_RATED, true).commit()
+        setConditionsAreMet()
+        preferencesEditor.putBoolean(KEY_USER_HAS_RATED, true).commit()
 
         activityTestRule.launchActivity(null)
 
@@ -68,9 +134,10 @@ public class MainActivityUiTest {
 
     @Test
     fun dialogShouldNotPopupWhenUserSetNeverRemindAgain() {
-        setupAndClearSharedPrefs()
+        clearSharedPrefs()
 
-        preferencesEditor!!.putBoolean(KEY_NEVER_REMIND_AGAIN, true).commit()
+        setConditionsAreMet()
+        preferencesEditor.putBoolean(KEY_NEVER_REMIND_AGAIN, true).commit()
 
         activityTestRule.launchActivity(null)
 
@@ -79,12 +146,12 @@ public class MainActivityUiTest {
 
     @Test
     fun dialogShouldNotPopupWhenRequirementsAreNotMet() {
-        setupAndClearSharedPrefs()
+        clearSharedPrefs()
 
-        preferencesEditor!!.putInt(KEY_LAUNCH_COUNT, 1).commit()
+        preferencesEditor.putInt(KEY_LAUNCH_COUNT, 1).commit()
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_YEAR, -1)
-        preferencesEditor!!.putLong(KEY_FIRST_START_DATE, cal.timeInMillis).commit()
+        preferencesEditor.putLong(KEY_FIRST_START_DATE, cal.timeInMillis).commit()
 
         activityTestRule.launchActivity(null)
 
@@ -92,8 +159,8 @@ public class MainActivityUiTest {
     }
 
     @Test
-    fun checkButtonVisibility() {
-        setupAndClearSharedPrefs()
+    fun buttonVisibilityShouldAdjust() {
+        clearSharedPrefs()
 
         activityTestRule.launchActivity(null)
         //All Buttons are visible
