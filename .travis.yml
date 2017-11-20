@@ -11,11 +11,13 @@ android:
     - 'android-sdk-preview-license-.+'
     - 'google-gdk-license-.+'
 before_install:
+    # the whole licensing is messed up...
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
-    #- yes | sdkmanager --licenses
+    # install tools etc. separately because it does not work otherwise, dont know why
   - sdkmanager tools
   - sdkmanager "system-images;android-19;default;armeabi-v7a"
+    # create & start emulator
   - echo no | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a"
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
   - chmod +x gradlew
