@@ -111,6 +111,8 @@ You can call `ratingDialog.rateNow()` to provide the functionality (Rate your ap
 
 If you want to check if the user already rated your app or dismissed the dialog forever you can use `.userDidRate()` or `.userSetNeverRemindAgain()`
 
+If you want to reset the saved data after a huge update for example you can use `.reset()` so the flow begins from the scratch.
+
 ### Customization via styles.xml
 
 ```xml
@@ -144,6 +146,10 @@ If you want to check if the user already rated your app or dismissed the dialog 
 ```
 
 Set the theme on the dialog: `ratingDialog.resourceIdStyle = R.style.CustomAlertDialogStyle`
+
+### Espresso Tests
+`./gradlew connectedAndroidTest`
+
 ## License
 
 Licensed under the Apache License, Version 2.0 (the "License");

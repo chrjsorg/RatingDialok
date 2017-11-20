@@ -188,6 +188,23 @@ class RatingDialok(ctx: Context) {
     }
 
     /**
+     * Resets:
+     * - User has rated
+     * - User set remind me never again
+     * - Launch Count
+     * - First Launch Date
+     */
+    public fun reset() {
+        setLaunchCount(0)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(KEY_USER_HAS_RATED, false)
+        editor.putLong(KEY_FIRST_START_DATE, 0L)
+        editor.putBoolean(KEY_NEVER_REMIND_AGAIN, false)
+
+        editor.apply()
+    }
+
+    /**
      * Returns true if the user rated the app already
      */
     @Suppress("MemberVisibilityCanPrivate")
