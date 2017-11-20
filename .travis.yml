@@ -6,22 +6,22 @@ android:
     - tools # to get the new `repository-11.xml`
     - platform-tools
     - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
-    - build-tools-26.0.2
-    - android-26
-    - sys-img-x86-addon-google_apis-google-26
   licenses:
     - 'android-sdk-license-.+'
     - 'android-sdk-preview-license-.+'
     - 'google-gdk-license-.+'
 before_install:
   - mkdir "$ANDROID_HOME/licenses" || true
+  - echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - sdkmanager tools
+  - sdkmanager "system-images;android-19;default;armeabi-v7a"
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a"
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
   - chmod +x gradlew
   - ./gradlew dependencies || true
 before_script:
-  - echo yes | sdkmanager tools
-  - echo no | avdmanager create avd -n test -f -k "system-images;android-26;google_apis;x86" -b google_apis/x8
-  - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-script:
-- ./gradlew connectedDebugAndroidTest
+
+install: ./gradlew clean assemble
+script: ./gradlew connectedDebugAndroidTest
