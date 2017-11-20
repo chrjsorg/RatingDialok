@@ -4,17 +4,30 @@ jdk: oraclejdk8
 android:
   components:
     - tools # to get the new `repository-11.xml`
-    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
     - platform-tools
-    - build-tools-26.0.2
-    - android-26
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
   licenses:
     - 'android-sdk-license-.+'
     - 'android-sdk-preview-license-.+'
     - 'google-gdk-license-.+'
 before_install:
+    # the whole licensing is messed up...
   - mkdir "$ANDROID_HOME/licenses" || true
+  - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+    # install tools etc. separately because it does not work otherwise, dont know why
+  - sdkmanager tools
+  - sdkmanager "system-images;android-19;default;armeabi-v7a"
+    # create & start emulator
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a"
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
   - chmod +x gradlew
   - ./gradlew dependencies || true
-script:
-- ./gradlew build
+before_script:
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+install: ./gradlew clean assemble
+script: ./gradlew connectedDebugAndroidTest
+
+notifications:
+  email: false
