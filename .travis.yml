@@ -18,7 +18,7 @@ before_install:
   - chmod +x gradlew
   - ./gradlew dependencies || true
 before_script:
-  - ls -la ${ANDROID_HOME}
+  - sdkmanager tools
   - echo no | avdmanager create avd -n test -f -k "system-images;android-26;google_apis;x86" -b google_apis/x8
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
