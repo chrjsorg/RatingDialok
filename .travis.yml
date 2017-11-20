@@ -28,3 +28,6 @@ before_script:
 
 install: ./gradlew clean assemble
 script: ./gradlew connectedDebugAndroidTest
+
+notifications:
+  email: false
