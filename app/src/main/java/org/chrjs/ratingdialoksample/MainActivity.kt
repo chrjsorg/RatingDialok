@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRatingDialog() {
         ratingDialog = RatingDialok(this).apply {
-            isCancelable = true
+            isCancelable = false
             minimumDaysAfter = 7
             minimumLaunchCount = 5
             useOrConditionForDaysAfterAndLaunchCount = true

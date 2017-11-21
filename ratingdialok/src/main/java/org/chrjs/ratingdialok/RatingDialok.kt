@@ -282,7 +282,7 @@ class RatingDialok(ctx: Context) {
             setMessage(resourceIdMessage!!)
             setPositiveButton(resourceIdRateNow!!, { _, _ -> rateNow() })
             setOnCancelListener({ setRemindLater() })
-
+            setCancelable(isCancelable)
             //Optional field title
             resourceIdTitle?.let { setTitle(it) }
 
