@@ -2,7 +2,6 @@ package org.chrjs.ratingdialoksample
 
 import android.content.SharedPreferences
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -169,22 +168,20 @@ public class MainActivityUiTest {
 
         onView(allOf<View>(withId(android.R.id.button1), withText(R.string.rateNow), isDisplayed())).check(matches(isDisplayed()))
         onView(allOf<View>(withId(android.R.id.button2), withText(R.string.remindNever), isDisplayed())).check(matches(isDisplayed()))
-        onView(allOf<View>(withId(android.R.id.button3), withText(R.string.remindLater), isDisplayed())).check(matches(isDisplayed()))
-
-        Espresso.pressBack()
+        onView(allOf<View>(withId(android.R.id.button3), withText(R.string.remindLater), isDisplayed())).perform(click())
 
         //No remind never button
         onView(allOf<View>(withId(R.id.buttonNoRemindNever), isDisplayed())).perform(click())
         onView(allOf<View>(withId(android.R.id.button1), withText(R.string.rateNow), isDisplayed())).check(matches(isDisplayed()))
-        onView(allOf<View>(withId(android.R.id.button3), withText(R.string.remindLater), isDisplayed())).check(matches(isDisplayed()))
         onView(allOf<View>(withId(android.R.id.button2))).check(matches(not(isDisplayed())))
-
-        Espresso.pressBack()
+        onView(allOf<View>(withId(android.R.id.button3), withText(R.string.remindLater), isDisplayed()))
+                .check(matches(isDisplayed())).perform(click())
 
         //No remind later button
         onView(allOf<View>(withId(R.id.buttonNoRemindLater), isDisplayed())).perform(click())
         onView(allOf<View>(withId(android.R.id.button1), withText(R.string.rateNow), isDisplayed())).check(matches(isDisplayed()))
-        onView(allOf<View>(withId(android.R.id.button2), withText(R.string.remindNever), isDisplayed())).check(matches(isDisplayed()))
         onView(allOf<View>(withId(android.R.id.button3))).check(matches(not(isDisplayed())))
+        onView(allOf<View>(withId(android.R.id.button2), withText(R.string.remindNever), isDisplayed()))
+                .check(matches(isDisplayed())).perform(click())
     }
 }
