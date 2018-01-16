@@ -122,8 +122,8 @@ ratingDialog.addAdditionalCondition(condition);
 If you want only your custom conditions to apply, you can set both default conditions to `-1` so they will apply right away
 
 ```kotlin
-  ratingDialog.minimumDaysAfter = 0
-  ratingDialog.minimumLaunchCount = 0
+  ratingDialog.minimumDaysAfter = -1
+  ratingDialog.minimumLaunchCount = -1
 ```
 ### Debug
 You can use `.showNoMatterWhat()` instead of `.showDialogIfNeeded()` to display the dialog all the time and test it.
