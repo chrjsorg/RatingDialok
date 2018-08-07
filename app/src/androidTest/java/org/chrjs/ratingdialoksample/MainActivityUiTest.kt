@@ -37,10 +37,10 @@ public class MainActivityUiTest {
     }
 
     companion object {
-        private val KEY_USER_HAS_RATED = "RD_KEY_USER_HAS_RATED"
-        private val KEY_NEVER_REMIND_AGAIN = "RD_KEY_NEVER_REMIND_AGAIN"
-        private val KEY_FIRST_START_DATE = "RD_KEY_FIRST_START_DATE"
-        private val KEY_LAUNCH_COUNT = "RD_KEY_LAUNCH_COUNT"
+        private const val KEY_USER_HAS_RATED = "RD_KEY_USER_HAS_RATED"
+        private const val KEY_NEVER_REMIND_AGAIN = "RD_KEY_NEVER_REMIND_AGAIN"
+        private const val KEY_FIRST_START_DATE = "RD_KEY_FIRST_START_DATE"
+        private const val KEY_LAUNCH_COUNT = "RD_KEY_LAUNCH_COUNT"
     }
 
     private fun clearSharedPrefs() {

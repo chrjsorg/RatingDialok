@@ -15,11 +15,11 @@ import kotlin.collections.ArrayList
 class RatingDialok(ctx: Context) {
 
     companion object {
-        private val SHARED_PREF_NAME = "ratingDialok"
-        private val KEY_USER_HAS_RATED = "RD_KEY_USER_HAS_RATED"
-        private val KEY_NEVER_REMIND_AGAIN = "RD_KEY_NEVER_REMIND_AGAIN"
-        private val KEY_FIRST_START_DATE = "RD_KEY_FIRST_START_DATE"
-        private val KEY_LAUNCH_COUNT = "RD_KEY_LAUNCH_COUNT"
+        private const val SHARED_PREF_NAME = "ratingDialok"
+        private const val KEY_USER_HAS_RATED = "RD_KEY_USER_HAS_RATED"
+        private const val KEY_NEVER_REMIND_AGAIN = "RD_KEY_NEVER_REMIND_AGAIN"
+        private const val KEY_FIRST_START_DATE = "RD_KEY_FIRST_START_DATE"
+        private const val KEY_LAUNCH_COUNT = "RD_KEY_LAUNCH_COUNT"
     }
 
     /**
@@ -184,9 +184,9 @@ class RatingDialok(ctx: Context) {
     fun rateNow() {
         val appPackageName = context.get()?.packageName
         try {
-            context.get()?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)))
+            context.get()?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
         } catch (e: ActivityNotFoundException) {
-            context.get()?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)))
+            context.get()?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
         }
 
         sharedPreferences.edit().putBoolean(KEY_USER_HAS_RATED, true).apply()
@@ -212,12 +212,12 @@ class RatingDialok(ctx: Context) {
     @Suppress("RedundantVisibilityModifier")
     public fun reset() {
         setLaunchCount(0)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(KEY_USER_HAS_RATED, false)
-        editor.putLong(KEY_FIRST_START_DATE, 0L)
-        editor.putBoolean(KEY_NEVER_REMIND_AGAIN, false)
+        sharedPreferences.edit().apply {
+            putBoolean(KEY_USER_HAS_RATED, false)
+            putLong(KEY_FIRST_START_DATE, 0L)
+            putBoolean(KEY_NEVER_REMIND_AGAIN, false)
 
-        editor.apply()
+        }.apply()
     }
 
     /**
@@ -280,17 +280,17 @@ class RatingDialok(ctx: Context) {
         if (context.get() == null) return null
         val builder = AlertDialog.Builder(context.get()!!, resourceIdStyle).apply {
             setMessage(resourceIdMessage!!)
-            setPositiveButton(resourceIdRateNow!!, { _, _ -> rateNow() })
-            setOnCancelListener({ setRemindLater() })
+            setPositiveButton(resourceIdRateNow!!) { _, _ -> rateNow() }
+            setOnCancelListener { setRemindLater() }
             setCancelable(isCancelable)
             //Optional field title
             resourceIdTitle?.let { setTitle(it) }
 
             //Optional Button remind later
-            resourceIdRemindLater?.let { setNeutralButton(it, { _, _ -> setRemindLater() }) }
+            resourceIdRemindLater?.let { setNeutralButton(it) { _, _ -> setRemindLater() } }
 
             //Optional Button remind never
-            resourceIdRemindNever?.let { setNegativeButton(it, { _, _ -> setNeverRemindAgain() }) }
+            resourceIdRemindNever?.let { setNegativeButton(it) { _, _ -> setNeverRemindAgain() } }
         }
 
         return builder.create()
